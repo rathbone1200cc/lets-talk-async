@@ -1,0 +1,34 @@
+{
+  "name": "lets-talk-async",
+  "version": "0.0.0",
+  "description": "a talk about managing asynchronous control flow in nodejs",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rathbone1200cc/lets-talk-async.git"
+  },
+  "keywords": [
+    "talk",
+    "async",
+    "easy-async",
+    "promises"
+  ],
+  "author": "rathbone1200cc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rathbone1200cc/lets-talk-async/issues"
+  },
+  "homepage": "https://github.com/rathbone1200cc/lets-talk-async",
+  "dependencies": {
+    "async": "0.9.0",
+    "lodash": "3.8.0",
+    "q": "1.4.1",
+    "streamline": "0.12.1"
+  }
+}
