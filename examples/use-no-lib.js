@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var work = require('./mock-work');
 
 work.A(function(){
@@ -12,15 +11,13 @@ work.A(function(){
   });
 });
 
-function workOnI(){
-  work.I(workOnJ);
-}
-function workOnJ(){
-  work.J(workOnK);
-}
+function workOnI(){ work.I(workOnJ); }
+function workOnJ(){ work.J(workOnK); }
 function workOnK(){
-  console.log('continuing after I, J, K in series');
-  startParallelWork();
+  work.K(function(){
+    console.log('continuing after I, J, K in series');
+    startParallelWork();
+  });
 }
 
 function startParallelWork(){
