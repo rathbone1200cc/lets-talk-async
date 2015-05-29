@@ -7,7 +7,9 @@ work.B(_);
 work.C(_);
 console.log('continuing after A, B, C in series');
 
-startNextSeries(startParallelWork);
+startNextSeries(function(){
+  startParallelWork(continueAfterParallelWork);
+});
 
 function startNextSeries(_){
   work.I(_);
@@ -16,16 +18,14 @@ function startNextSeries(_){
   console.log('continuing after I, J, K in series');
 }
 
-function startParallelWork(){
+function startParallelWork(_){
   [
     work.X,
     work.Y,
     work.Z
-  ].map(function(fn){
-    return fn();
+  ].map_(_, 3, function(_, fn){
+    return fn(_);
   });
-
-  continueAfterParallelWork();
 }
 
 function continueAfterParallelWork(){
