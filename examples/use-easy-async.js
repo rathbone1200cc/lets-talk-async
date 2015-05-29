@@ -6,7 +6,10 @@ var easyAsync = require('easy-async');
 easyAsync.start(work.A)
 .then(work.B)
 .then(work.C)
-.then(startNextSeries);
+.then(function(){
+  console.log('continuing after I, J, K in series');
+  startNextSeries();
+});
 
 function startNextSeries(){
   easyAsync.start(function workOnI(callback){ work.I(callback); })

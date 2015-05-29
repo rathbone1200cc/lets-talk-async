@@ -35,7 +35,7 @@ function startParallelWork() {
       work.Y,
       work.Z
     ],
-    continueAfterParallelWork()
+    continueAfterParallelWork
   );
 }
 
