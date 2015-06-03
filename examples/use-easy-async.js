@@ -62,7 +62,7 @@ function startParallelWork() {
   .and(function workOnZ(callback) {
     work.Z(callback);
   })
-  .and(continueAfterParallelWork);
+  .then(continueAfterParallelWork);
 }
 
 function continueAfterParallelWork() {
