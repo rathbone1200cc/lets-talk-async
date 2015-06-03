@@ -6,10 +6,10 @@ var letters = ['A', 'B', 'C', 'I', 'J', 'K', 'X', 'Y', 'Z'];
 
 _.each(letters, function(letter){
   exports[letter] = function(callback){
-    console.log('starting work on ' + letter);
+    console.log(letter + letter + letter + ' work starting');
     setTimeout(function(){
-      console.log('done with work on ' + letter);
+      console.log( letter + letter + letter + ' work complete');
       if (callback){ callback(); }
-    }, Math.random() * 500);
+    }, 1000);
   };
 });

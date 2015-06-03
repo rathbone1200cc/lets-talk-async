@@ -3,31 +3,54 @@
 var async = require('async');
 var work = require('./mock-work');
 
+/////////////////////////////////////////
+// 3 tasks in series
+/////////////////////////////////////////
+
 async.series([
   work.A,
   work.B,
   work.C
 ], function() {
   console.log('continuing after A, B, C in series');
-  startNextSeries();
+  startNextSeries(); // passes control on to next example
 });
+
+
+
+
+
+
+/////////////////////////////////////////
+// 3 tasks in series - with wrappers
+/////////////////////////////////////////
 
 function startNextSeries() {
   async.series([
-    function workOnI(callback) {
+    function(callback) {
       work.I(callback);
     },
-    function workOnJ(callback) {
+    function(callback) {
       work.J(callback);
     },
-    function workOnK(callback) {
-      work.K(callback);
+    function(callback) {
+      work.K(function(){
+        callback(new Error('example error'));
+      });
     }
-  ], function() {
+  ], function(err) {
     console.log('continuing after I, J, K in series');
-    startParallelWork();
+    startParallelWork(); // passes control on to next example
   });
 }
+
+
+
+
+
+/////////////////////////////////////////
+// 3 tasks in paralllel
+/////////////////////////////////////////
 
 function startParallelWork() {
   async.parallel([
