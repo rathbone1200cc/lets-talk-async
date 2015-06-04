@@ -6,16 +6,31 @@ var easyAsync = require('easy-async');
 
 
 /////////////////////////////////////////
-// 3 tasks in series
+// 3 tasks in series, 3 tasks in parallel
 /////////////////////////////////////////
 
 easyAsync.start(work.A)
 .then(work.B)
 .then(work.C)
 .then(function() {
-  console.log('continuing after I, J, K in series');
-  startNextSeries(); // passes control on to next example
+  console.log('continuing after A, B, C in series');
+  startParallelWork(); // passes control on to next example
 });
+
+// "then" used above for tasks in series,
+// "and" used below for tasks in parallel.
+
+function startParallelWork() {
+  easyAsync.start(work.X)
+  .and(work.Y)
+  .and(work.Z)
+  .then(function() {
+    console.log('continuing after X, Y, Z in parallel');
+    startNextSeries(); // passes control on to next example
+  });
+}
+
+
 
 
 
@@ -28,43 +43,34 @@ easyAsync.start(work.A)
 /////////////////////////////////////////
 
 function startNextSeries() {
+
+  var user;
+
   easyAsync.start(function(callback) {
     work.I(callback);
   })
   .then(function(callback) {
-    work.J(callback);
+    work.J(function(err, u){
+      if (err) { return callback(err); }
+      user = u;
+      callback();
+    });
   })
   .then(function(callback) {
-    work.K(callback);
+    work.K(user, function(){
+      callback(new Error('example error'));
+    });
   })
   .then(function() {
+    console.log('this point will not be reached because of preceeding errors');
+  })
+  .onError(function(err){
+    if (err){
+      // ... handle error - which error?
+    }
     console.log('continuing after I, J, K in series');
-    startParallelWork(); // passes control on to next example
-  });
+  })
+  ;
 }
 
 
-
-
-
-/////////////////////////////////////////
-// 3 tasks in parallel - notice the "and"
-/////////////////////////////////////////
-
-
-function startParallelWork() {
-  easyAsync.start(function(callback) {
-    work.X(callback);
-  })
-  .and(function(callback) {
-    work.Y(callback);
-  })
-  .and(function(callback) {
-    work.Z(callback);
-  })
-  .then(continueAfterParallelWork);
-}
-
-function continueAfterParallelWork() {
-  console.log('continuing after X, Y, Z in parallel');
-}

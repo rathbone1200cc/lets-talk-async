@@ -13,29 +13,17 @@ work.B(_);
 work.C(_);
 console.log('continuing after A, B, C in series');
 
-// next example could simply start here.
+// passes control on to next example
+startParallelWork(_);
+//alternateParallelWork(_);
 
-// passes control on to next example - confusing?
-startNextSeries(function(){
-  startParallelWork(continueAfterParallelWork);
-});
+console.log('continuing after X, Y, Z in parallel');
 
-
-
-
+// passes control on to next example
+startNextSeries(_);
 
 
 
-/////////////////////////////////////////
-// 3 tasks in series - nested in function
-/////////////////////////////////////////
-
-function startNextSeries(_){  // <- the _ is required
-  work.I(_);
-  work.J(_);
-  work.K(_);
-  console.log('continuing after I, J, K in series');
-}
 
 
 
@@ -48,7 +36,7 @@ function startNextSeries(_){  // <- the _ is required
 ///////////////////////////////////////////
 
 
-function startParallelWork(_){
+function startParallelWork(_){  // <- the _ is required
   [
     work.X,
     work.Y,
@@ -58,6 +46,42 @@ function startParallelWork(_){
   });
 }
 
-function continueAfterParallelWork(){
-  console.log('continuing after X, Y, Z in parallel');
+function alternateParallelWork(_){  // <- the _ is required
+  var fX = work.X(!_);
+  var fY = work.Y(!_);
+  var fZ = work.Z(!_);
+  return [fX(_), fY(_), fZ(_)];
 }
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////
+// 3 tasks in series - handling arguments & errors
+///////////////////////////////////////////////////
+
+function startNextSeries(_){
+  var resultOfI = work.I(_);
+  work.J(resultOfI, _);
+  try {
+    work.K(_);
+  }
+  catch(err){
+    //... handle error
+  }
+  console.log('continuing after I, J, K in series');
+}
+
+
+
+
+
+
+
