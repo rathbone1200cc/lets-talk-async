@@ -53,13 +53,13 @@ function startNextSeries() {
 
 
 function startParallelWork() {
-  easyAsync.start(function workOnX(callback) {
+  easyAsync.start(function(callback) {
     work.X(callback);
   })
-  .and(function workOnY(callback) {
+  .and(function(callback) {
     work.Y(callback);
   })
-  .and(function workOnZ(callback) {
+  .and(function(callback) {
     work.Z(callback);
   })
   .then(continueAfterParallelWork);
