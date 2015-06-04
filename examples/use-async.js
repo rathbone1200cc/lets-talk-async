@@ -3,9 +3,9 @@
 var async = require('async');
 var work = require('./mock-work');
 
-/////////////////////////////////////////
-// 3 tasks in series
-/////////////////////////////////////////
+///////////////////////////////////////////
+// 3 tasks in series, 3 tasks in parallel
+///////////////////////////////////////////
 
 async.series([
   work.A,
@@ -13,44 +13,8 @@ async.series([
   work.C
 ], function() {
   console.log('continuing after A, B, C in series');
-  startNextSeries(); // passes control on to next example
+  startParallelWork(); // passes control on to next example
 });
-
-
-
-
-
-
-/////////////////////////////////////////
-// 3 tasks in series - with wrappers
-/////////////////////////////////////////
-
-function startNextSeries() {
-  async.series([
-    function(callback) {
-      work.I(callback);
-    },
-    function(callback) {
-      work.J(callback);
-    },
-    function(callback) {
-      work.K(function(){
-        callback(new Error('example error'));
-      });
-    }
-  ], function(err) {
-    console.log('continuing after I, J, K in series');
-    startParallelWork(); // passes control on to next example
-  });
-}
-
-
-
-
-
-/////////////////////////////////////////
-// 3 tasks in paralllel
-/////////////////////////////////////////
 
 function startParallelWork() {
   async.parallel([
@@ -58,10 +22,49 @@ function startParallelWork() {
       work.Y,
       work.Z
     ],
-    continueAfterParallelWork
+    function(){
+      console.log('continuing after X, Y, Z in parallel');
+      startNextSeries();
+    }
   );
 }
 
-function continueAfterParallelWork() {
-  console.log('continuing after X, Y, Z in parallel');
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////
+// 3 tasks in series - with wrappers, state, error handling
+///////////////////////////////////////////////////////////////
+
+
+function startNextSeries() {
+
+  var user;
+
+  async.series([
+    function(callback) {
+      work.I(callback);
+    },
+    function(callback) {
+      work.J(function(err, u){
+        if (err) { return callback(err); }
+        user = u;
+        callback();
+      });
+    },
+    function(callback) {
+      work.K(user, function(){
+        callback(new Error('example error'));
+      });
+    }
+  ], function(err) {
+    if (err){
+      // ... handle error - which error?
+    }
+    console.log('continuing after I, J, K in series');
+  });
 }
+

@@ -15,7 +15,10 @@ function makeItAPromise(fn) {
       }
     });
   });
-};
+}
+
+
+
 
 
 /////////////////////////////////////////
@@ -32,38 +35,13 @@ var promise =
   })
   .then(function() {
     console.log('continuing after A,B,C in series');
-    startNextSeries(); // passes control on to next example
+    startParallelWork(); // passes control on to next example
   });
 
 
 
 
 
-
-/////////////////////////////////////////////////
-// 3 tasks in series - double wrapped - readable?
-/////////////////////////////////////////////////
-
-function startNextSeries() {
-
-  function makePromiseCallback(fn) {
-    return function() {
-      return makeItAPromise(fn);
-    };
-  }
-
-  var pI = makePromiseCallback(work.I),
-    pJ = makePromiseCallback(work.J),
-    pK = makePromiseCallback(work.K);
-
-  q.fcall(pI)
-    .then(pJ)
-    .then(pK)
-    .then(function() {
-      console.log('continuing after I, J, K in series');
-      startParallelWork();  // passes control on to next example
-    });
-}
 
 
 
@@ -86,4 +64,59 @@ function startParallelWork() {
 
 function continueAfterParallelWork() {
   console.log('continuing after X, Y, Z in parallel');
+  startNextSeries();
 }
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////
+// 3 tasks in series - with arguments & error handling
+///////////////////////////////////////////////////////
+
+function startNextSeries(){
+
+  var promise =
+    makeItAPromise(work.I)
+    .then(
+      function(somethingReturnedByI) {
+        return makeItAPromise(work.J);
+      },
+      function(errorFromI){
+        // ... handle error from I.
+        // doesn't move on to J
+      }
+    )
+    .then(
+      function(somethingReturnedByJ) {
+        //actually use somethingReturnedByJ in task K
+        return makeItAPromise(function(callback){
+          work.K(somethingReturnedByJ, callback);
+        });
+      },
+      function(errorFromJ) {
+        // ... handle error from J.
+        // does move on to K
+        return makeItAPromise(work.K);
+      }
+    )
+    .then(function() {
+      console.log('continuing after I,J,K in series');
+    });
+
+}
+
+
+
+
+
+
+
+

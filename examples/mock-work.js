@@ -5,11 +5,11 @@ var _ = require('lodash');
 var letters = ['A', 'B', 'C', 'I', 'J', 'K', 'X', 'Y', 'Z'];
 
 _.each(letters, function(letter){
-  exports[letter] = function(callback){
+  exports[letter] = function(arg, callback){
     console.log(letter + letter + letter + ' work starting');
     setTimeout(function(){
       console.log( letter + letter + letter + ' work complete');
-      if (callback){ callback(); }
+      if (callback || arg){ (callback || arg)(); }
     }, 1000);
   };
 });
