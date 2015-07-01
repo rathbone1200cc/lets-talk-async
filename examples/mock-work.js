@@ -9,7 +9,7 @@ _.each(letters, function(letter){
     console.log(letter + letter + letter + ' work starting');
     setTimeout(function(){
       console.log( letter + letter + letter + ' work complete');
-      if (callback || arg){ (callback || arg)(); }
-    }, 1000);
+      if (callback || arg){ (callback || arg)(null, letter); }
+    }, 1000 + Math.random() * 20);
   };
 });

@@ -16,10 +16,8 @@ easyAsync.start(work.A)
   console.log('continuing after A, B, C in series');
   startParallelWork(); // passes control on to next example
 });
-
 // "then" used above for tasks in series,
 // "and" used below for tasks in parallel.
-
 function startParallelWork() {
   easyAsync.start(work.X)
   .and(work.Y)
@@ -41,11 +39,8 @@ function startParallelWork() {
 /////////////////////////////////////////
 // 3 tasks in series - wrapped functions
 /////////////////////////////////////////
-
 function startNextSeries() {
-
   var user;
-
   easyAsync.start(function(callback) {
     work.I(callback);
   })

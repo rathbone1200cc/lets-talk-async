@@ -16,6 +16,9 @@ async.series([
   startParallelWork(); // passes control on to next example
 });
 
+
+
+
 function startParallelWork() {
   async.parallel([
       work.X,
@@ -39,11 +42,8 @@ function startParallelWork() {
 // 3 tasks in series - with wrappers, state, error handling
 ///////////////////////////////////////////////////////////////
 
-
 function startNextSeries() {
-
   var user;
-
   async.series([
     function(callback) {
       work.I(callback);

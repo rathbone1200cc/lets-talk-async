@@ -6,12 +6,12 @@ var work = require('./mock-work');
 
 function makeItAPromise(fn) {
   return q.Promise(function(resolve, reject) {
-    fn(function(err) {
+    fn(function(err, arg) {
       if (err) {
         reject(err);
       }
       else {
-        resolve();
+        resolve(arg);
       }
     });
   });
@@ -95,10 +95,10 @@ function startNextSeries(){
       }
     )
     .then(
-      function(somethingReturnedByJ) {
-        //actually use somethingReturnedByJ in task K
+      function(user) {
+        //actually use something returned by task J in task K
         return makeItAPromise(function(callback){
-          work.K(somethingReturnedByJ, callback);
+          work.K(user, callback);
         });
       },
       function(errorFromJ) {
@@ -110,7 +110,6 @@ function startNextSeries(){
     .then(function() {
       console.log('continuing after I,J,K in series');
     });
-
 }
 
 

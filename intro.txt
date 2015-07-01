@@ -1,0 +1,10 @@
+
+
+
+      Dan Rathbone
+      https://cargraph.com
+      I'm looking for a cofounder
+
+
+This talk:  https://github.com/rathbone1200cc/lets-talk-async
+Easy-Async: https://github.com/rathbone1200cc/easy-async
